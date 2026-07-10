@@ -1,0 +1,19 @@
+services:
+
+  motorparts:
+
+    build: .
+
+    container_name: motorparts
+
+    ports:
+      - "5000:5000"
+
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+    env_file:
+      - .env
+
+    restart: unless-stopped

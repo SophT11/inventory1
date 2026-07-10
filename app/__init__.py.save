@@ -1,0 +1,54 @@
+#import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+# Create the SQLAlchemy object
+db = SQLAlchemy()
+
+
+def create_app():
+    # Project root directory
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    # Load .env from the project root
+    load_dotenv(BASE_DIR / ".env")
+
+    # Create Flask application
+    app = Flask(__name__)
+
+    # Configuration
+    app.config["SECRET_KEY"] = os.getenv(
+        "SECRET_KEY",
+        "dev-secret-key"
+    )
+
+ #   app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+ #       "DATABASE_URL",
+ #       f"sqlite:///{BASE_DIR}/data/motor_parts.db"
+ #   )
+
+
+    db_path = BASE_DIR / "data" / "motor_parts.db"
+
+    print("=" * 60)
+    print(f"BASE_DIR : {BASE_DIR}")
+    print(f"DB PATH  : {db_path}")
+    print("=" * 60)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    print("BASE_DIR =", BASE_DIR)
+    print("DATABASE =", app.config["SQLALCHEMY_DATABASE_URI"])
+
+    # Initialize extensions
+    db.init_app(app)
+
+    # Register blueprints
+    from .routes import main
+    app.register_blueprint(main)
+
+    return app

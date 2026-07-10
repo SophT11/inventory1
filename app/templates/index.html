@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+<table>
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    {% for part in parts %}
+
+        <tr>
+            <td>{{ part.id }}</td>
+            <td>{{ part.part_number }}</td>
+            <td>{{ part.description }}</td>
+            <td>${{ "%.2f"|format(part.price) }}</td>
+            <td>{{ part.stock }}</td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
